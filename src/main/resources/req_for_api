@@ -1,0 +1,37 @@
+//Student
+
+POST-> Fetch
+
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "id": "1",
+  "name": "Pasindu"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("localhost:8080/api/v1/student", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+
+GET (Search By Id) - > Fetch
+
+var requestOptions = {
+  method: 'GET',
+  redirect: 'follow'
+};
+
+fetch("localhost:8080/api/v1/student/7", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
