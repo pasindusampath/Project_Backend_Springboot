@@ -20,4 +20,7 @@ public class StudentDTO {
     private String guardianName;
     private String address;
     private String guardianPhone;
+    private String imageData;
+    private String imagePath;
+    private byte[] imageArray;
 }
