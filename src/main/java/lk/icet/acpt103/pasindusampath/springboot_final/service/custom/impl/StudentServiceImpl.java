@@ -6,21 +6,17 @@ import lk.icet.acpt103.pasindusampath.springboot_final.entity.Student;
 import lk.icet.acpt103.pasindusampath.springboot_final.service.custom.StudentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.javapoet.ClassName;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Base64;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -45,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
             System.out.println("AB path: " + outputfile.getAbsolutePath());
             System.out.println("path: " + outputfile.getPath());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage()+"Student Service Implementation Method save");
         }
         Student save = repo.save(mapper.map(studentDTO, Student.class));
         return mapper.map(save, StudentDTO.class);
@@ -67,15 +63,19 @@ public class StudentServiceImpl implements StudentService {
         return list;
     }
 
-    public StudentDTO search(int id) throws IOException {
+    public StudentDTO search(int id){
         Optional<Student> byId = repo.findById(id);
         Student ob = byId.orElseGet(Student::new);
         StudentDTO map = mapper.map(ob, StudentDTO.class);
-        BufferedImage read = ImageIO.read(new File(map.getImagePath()));
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(read, "jpg", baos);
-        byte[] bytes = baos.toByteArray();
-        map.setImageData(Base64.getEncoder().encodeToString(bytes));
+        try {
+            BufferedImage read = ImageIO.read(new File(map.getImagePath()));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(read, "jpg", baos);
+            byte[] bytes = baos.toByteArray();
+            map.setImageData(Base64.getEncoder().encodeToString(bytes));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return map;
     }
 
